@@ -50,12 +50,12 @@
 }
 
 @media print {
-  /* Hide standard web UI */
-  nav, footer, .no-print, button, .lucide {
+  /* Aggressive hide of non-essential elements */
+  nav, footer, main, .no-print, button, .lucide {
     display: none !important;
   }
 
-  /* Reset body and html for print */
+  /* Reset layout for print */
   html, body {
     height: auto !important;
     overflow: visible !important;
@@ -64,12 +64,29 @@
     padding: 0 !important;
   }
 
-  /* The actual print container needs to be at the root of the print engine */
-  #root > div:not(.print-container) {
-    display: none !important;
+  /* Fix for React root potentially hiding content */
+  #root, #root > div {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
+  /* Ensure the print container itself is visible and at the top */
+  .print-container {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    min-height: 297mm !important;
+    visibility: visible !important;
+    z-index: 99999 !important;
+    background: white !important;
+  }
+
+  /* The actual A4 page content */
   .print-area {
+    visibility: visible !important;
     position: relative !important;
     width: 210mm !important;
     height: 297mm !important;
@@ -83,9 +100,15 @@
     print-color-adjust: exact;
   }
 
-  /* Avoid any breaks inside the CV container */
+  /* Show all children of the print area */
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  /* Prevent page breaks inside the content */
   .cv-content {
-    break-inside: avoid;
+    page-break-after: avoid;
+    break-after: avoid;
   }
 
   @page {

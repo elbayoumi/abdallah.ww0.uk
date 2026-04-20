@@ -802,7 +802,7 @@ const CVPage = ({ t, onClose, lang }: { t: any, onClose: () => void, lang: Lang 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="print-container fixed inset-0 z-[100] bg-neutral-900/95 backdrop-blur-xl overflow-y-auto px-4 py-8 lg:p-12 no-scrollbar print:p-0 print:bg-white print:static print:overflow-visible print:block"
+      className="print-container fixed inset-0 z-[100] bg-neutral-900/95 backdrop-blur-xl overflow-y-auto px-4 py-8 lg:p-12 no-scrollbar print:p-0 print:bg-white print:static print:overflow-visible print:block print:z-auto"
     >
       <div className="max-w-4xl mx-auto relative print:max-w-none print:m-0">
         {/* CV Toolbar */}
