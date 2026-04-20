@@ -788,141 +788,193 @@ const Contact = ({ t }: { t: any }) => {
 const CVPage = ({ t, onClose, lang }: { t: any, onClose: () => void, lang: Lang }) => {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
-      className="fixed inset-0 z-[100] bg-neutral-50 overflow-y-auto px-4 py-8 lg:p-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-neutral-900/90 backdrop-blur-sm overflow-y-auto px-4 py-8 lg:p-12 no-scrollbar print:p-0 print:bg-white"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative">
         {/* CV Toolbar */}
-        <div className="flex justify-between items-center mb-8 print:hidden">
+        <div className="flex justify-between items-center mb-8 no-print">
           <button 
             onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-neutral-200 hover:bg-neutral-100 transition-all text-sm font-bold"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-lg backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all text-sm font-bold shadow-2xl"
           >
             <X size={18} />
             {t.cvPage.close}
           </button>
-          <div className="flex gap-4">
-            <button 
-              onClick={() => window.print()}
-              className="flex items-center gap-3 px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-all shadow-xl shadow-primary/30 text-base font-bold group"
-            >
-              <Download size={20} className="group-hover:animate-bounce" />
-              {t.cvPage.print}
-            </button>
-          </div>
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center gap-3 px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-all shadow-xl shadow-primary/30 text-base font-bold group"
+          >
+            <Download size={20} className="group-hover:animate-bounce" />
+            {t.cvPage.print}
+          </button>
         </div>
 
-        {/* CV Content - Paper Style */}
-        <div className="bg-white shadow-2xl rounded-sm p-8 md:p-16 border-t-8 border-primary relative overflow-hidden print:shadow-none print:p-0 print:border-none">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -translate-y-1/2 translate-x-1/2 rounded-full" />
+        {/* CV Content - Professional A4 Container */}
+        <div className="print-area bg-white rounded-sm relative overflow-hidden mx-auto shadow-2xl print:shadow-none min-h-[297mm]">
+          {/* Design Accent */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary/10" />
           
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12 relative z-10">
-            <div>
-              <h1 className="text-4xl font-serif font-bold text-neutral-900 mb-2">{t.name}</h1>
-              <h2 className="text-xl text-primary font-bold uppercase tracking-wide">{t.title}</h2>
-            </div>
-            <div className="space-y-2 text-sm text-neutral-600">
-              <div className="flex items-center gap-2 justify-end ltr:text-right rtl:text-left">
-                <span>abdallahashrf618@gmail.com</span>
-                <Mail size={14} className="text-primary" />
-              </div>
-              <div className="flex items-center gap-2 justify-end ltr:text-right rtl:text-left" dir="ltr">
-                <span>+20 100 021 3215</span>
-                <Phone size={14} className="text-primary" />
-              </div>
-              <div className="flex items-center gap-2 justify-end ltr:text-right rtl:text-left">
-                <span>{t.contact.egypt}</span>
-                <MapPin size={14} className="text-primary" />
-              </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12">
-            {/* Sidebar info */}
-            <div className="md:col-span-1 space-y-10">
-              <section>
-                <h3 className="text-lg font-bold border-b-2 border-primary/10 pb-2 mb-4 uppercase tracking-tighter">{t.cvPage.personalInfo}</h3>
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <p className="text-neutral-400 mb-1">{t.about.countryLabel}</p>
-                    <p className="font-bold">{t.about.country}</p>
-                  </div>
-                  <div>
-                    <p className="text-neutral-400 mb-1">{t.skills.military}</p>
-                    <p className="font-bold">{t.skills.militaryStatus}</p>
-                  </div>
-                  <div>
-                    <p className="text-neutral-400 mb-1">{t.skills.ar}</p>
-                    <p className="font-bold">{t.skills.arLevel}</p>
-                  </div>
-                  <div>
-                    <p className="text-neutral-400 mb-1">{t.skills.en}</p>
-                    <p className="font-bold">{t.skills.enLevel}</p>
-                  </div>
+          <div className="p-8 md:p-12 lg:p-16 relative z-10 h-full flex flex-col">
+            {/* Header Section */}
+            <header className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12 border-b border-neutral-100 pb-12">
+              <div className="flex-1">
+                <div className="inline-block px-3 py-1 bg-primary text-white text-[10px] font-bold tracking-widest uppercase mb-4 rounded-sm">
+                  Curriculum Vitae
                 </div>
-              </section>
-
-              <section>
-                <h3 className="text-lg font-bold border-b-2 border-primary/10 pb-2 mb-4 uppercase tracking-tighter">{t.skills.heading}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {t.skills.items.map((skill: string) => (
-                    <span key={skill} className="px-2 py-1 bg-neutral-50 text-neutral-700 rounded border border-neutral-100 text-xs">
-                      {skill}
-                    </span>
-                  ))}
+                <h1 className="text-4xl md:text-5xl font-serif font-black text-neutral-900 mb-2 leading-tight">
+                  {t.hero.firstName} <br />
+                  <span className="text-primary">{t.hero.lastName}</span>
+                </h1>
+                <h2 className="text-lg text-neutral-500 font-medium tracking-wide uppercase mt-4">
+                  {t.title}
+                </h2>
+              </div>
+              
+              <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-100 space-y-4 min-w-[280px]">
+                <div className="flex items-center gap-3 text-sm text-neutral-600">
+                  <div className="w-8 h-8 bg-white shadow-sm rounded-lg flex items-center justify-center text-primary">
+                    <Mail size={14} />
+                  </div>
+                  <span className="font-medium">abdallahashrf618@gmail.com</span>
                 </div>
-              </section>
-            </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-600" dir="ltr">
+                  <div className="w-8 h-8 bg-white shadow-sm rounded-lg flex items-center justify-center text-primary">
+                    <Phone size={14} />
+                  </div>
+                  <span className="font-medium">+20 100 021 3215</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-600">
+                  <div className="w-8 h-8 bg-white shadow-sm rounded-lg flex items-center justify-center text-primary">
+                    <MapPin size={14} />
+                  </div>
+                  <span className="font-medium">{t.contact.egypt}</span>
+                </div>
+              </div>
+            </header>
 
-            {/* Main Content */}
-            <div className="md:col-span-2 space-y-10">
-              <section>
-                <h3 className="text-lg font-bold border-b-2 border-primary/10 pb-2 mb-4 uppercase tracking-tighter">{t.cvPage.summary}</h3>
-                <p className="text-sm text-neutral-600 leading-relaxed text-justify">
-                  {t.about.description}
-                </p>
-              </section>
+            <div className="grid md:grid-cols-12 gap-12 flex-1">
+              {/* Main Column */}
+              <div className="md:col-span-8 space-y-12">
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1.5 h-6 bg-primary rounded-full" />
+                    <h3 className="text-xl font-bold uppercase tracking-tighter text-neutral-900">{t.cvPage.summary}</h3>
+                  </div>
+                  <p className="text-sm text-neutral-600 leading-relaxed text-justify bg-neutral-50/50 p-4 rounded-xl border border-neutral-100/50">
+                    {t.about.description}
+                  </p>
+                </section>
 
-              <section>
-                <h3 className="text-lg font-bold border-b-2 border-primary/10 pb-2 mb-4 uppercase tracking-tighter">{t.experience.heading}</h3>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className="font-bold text-neutral-900">{t.experience.role}</h4>
-                      <span className="text-xs font-bold text-primary" dir="ltr">{t.experience.period}</span>
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1.5 h-6 bg-primary rounded-full" />
+                    <h3 className="text-xl font-bold uppercase tracking-tighter text-neutral-900">{t.experience.heading}</h3>
+                  </div>
+                  <div className="space-y-8 relative ltr:pl-4 rtl:pr-4 ltr:border-l rtl:border-r border-neutral-100">
+                    <div className="relative">
+                      <div className="absolute top-0 ltr:-left-[21px] rtl:-right-[21px] w-4 h-4 bg-primary rounded-full border-4 border-white shadow-sm" />
+                      <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                        <h4 className="font-bold text-neutral-900 text-lg">{t.experience.role}</h4>
+                        <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded" dir="ltr">{t.experience.period}</span>
+                      </div>
+                      <p className="text-primary text-xs font-bold mb-4 tracking-wide uppercase">{t.experience.org}</p>
+                      <ul className="grid grid-cols-1 gap-3">
+                        {t.experience.tasks.map((task: string, i: number) => (
+                          <li key={i} className="flex gap-3 text-[13px] text-neutral-600 leading-relaxed">
+                            <span className="text-primary font-bold">•</span>
+                            <span>{task}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    <p className="text-primary text-xs font-bold mb-3">{t.experience.org}</p>
-                    <ul className="space-y-2">
-                      {t.experience.tasks.map((task: string, i: number) => (
-                        <li key={i} className="flex gap-2 text-xs text-neutral-600">
-                          <span className="text-primary">•</span>
-                          <span>{task}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
-                </div>
-              </section>
+                </section>
 
-              <section>
-                <h3 className="text-lg font-bold border-b-2 border-primary/10 pb-2 mb-4 uppercase tracking-tighter">{t.education.heading}</h3>
-                <div>
-                  <h4 className="font-bold text-neutral-900 text-sm">{t.education.degree}</h4>
-                  <p className="text-neutral-600 text-xs mt-1">{t.education.department}</p>
-                  <p className="text-primary text-xs font-bold mt-2">{t.education.grade}</p>
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1.5 h-6 bg-primary rounded-full" />
+                    <h3 className="text-xl font-bold uppercase tracking-tighter text-neutral-900">{t.education.heading}</h3>
+                  </div>
+                  <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-100">
+                    <h4 className="font-bold text-neutral-900 text-base mb-1">{t.education.degree}</h4>
+                    <p className="text-neutral-500 text-sm italic">{t.education.department}</p>
+                    <div className="mt-4 inline-flex items-center gap-2 text-primary font-bold text-sm bg-white px-4 py-1.5 rounded-full shadow-sm">
+                      <Globe size={14} />
+                      {t.education.grade}
+                    </div>
+                  </div>
+                </section>
+              </div>
+
+              {/* Support Column */}
+              <div className="md:col-span-4 space-y-12">
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1.5 h-6 bg-accent rounded-full" />
+                    <h3 className="text-xl font-bold uppercase tracking-tighter text-neutral-900">{t.cvPage.personalInfo}</h3>
+                  </div>
+                  <div className="space-y-6 text-sm">
+                    <div className="group">
+                      <p className="text-neutral-400 text-xs mb-1 uppercase tracking-widest">{t.about.countryLabel}</p>
+                      <p className="font-bold text-neutral-800">{t.about.country}</p>
+                    </div>
+                    <div className="group">
+                      <p className="text-neutral-400 text-xs mb-1 uppercase tracking-widest">{t.skills.military}</p>
+                      <p className="font-bold text-neutral-800">{t.skills.militaryStatus}</p>
+                    </div>
+                    <div className="group">
+                      <p className="text-neutral-400 text-xs mb-1 uppercase tracking-widest">Languages</p>
+                      <div className="space-y-2 mt-2">
+                        <div className="flex justify-between items-center bg-neutral-50 p-2 rounded-lg">
+                          <span className="font-bold text-neutral-700">{t.skills.ar}</span>
+                          <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">Native</span>
+                        </div>
+                        <div className="flex justify-between items-center bg-neutral-50 p-2 rounded-lg">
+                          <span className="font-bold text-neutral-700">{t.skills.en}</span>
+                          <span className="text-[10px] bg-neutral-200 text-neutral-500 px-2 py-0.5 rounded-full font-bold">Fair</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-1.5 h-6 bg-accent rounded-full" />
+                    <h3 className="text-xl font-bold uppercase tracking-tighter text-neutral-900">{t.skills.heading}</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {t.skills.items.map((skill: string) => (
+                      <span key={skill} className="px-3 py-1.5 bg-neutral-50 text-neutral-700 rounded-lg border border-neutral-100 text-[11px] font-medium shadow-sm hover:bg-primary/5 hover:border-primary/20 transition-all">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Final Professional Stamp */}
+                <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-neutral-100 rounded-3xl opacity-40 grayscale mt-auto">
+                    <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-3">
+                         <div className="w-10 h-10 bg-neutral-200 rounded-full" />
+                    </div>
+                    <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[4px]">Certified Eng.</p>
                 </div>
-              </section>
+              </div>
             </div>
-          </div>
 
-          {/* Footer of CV */}
-          <div className="mt-16 pt-8 border-t border-neutral-100 text-center">
-            <p className="text-[10px] text-neutral-400 italic">
-              {t.footer.allRights} © {new Date().getFullYear()} {t.name}
-            </p>
+            {/* Footer of CV */}
+            <footer className="mt-auto pt-12 border-t border-neutral-100 flex justify-between items-center">
+              <p className="text-[9px] text-neutral-400 tracking-wider">
+                DOCUMENT VERIFIED • {new Date().toLocaleDateString()}
+              </p>
+              <p className="text-[9px] text-neutral-400 uppercase font-bold tracking-widest">
+                {t.name}
+              </p>
+            </footer>
           </div>
         </div>
       </div>
