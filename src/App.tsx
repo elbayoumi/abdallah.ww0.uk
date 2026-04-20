@@ -421,7 +421,7 @@ const Hero = ({ t, onShowCV, lang }: { t: any, onShowCV: () => void, lang: Lang 
                     placeholder.className = "flex flex-col items-center justify-center p-8 text-center gap-4 text-neutral-300";
                     placeholder.innerHTML = `
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورتك<br/>profile-headshot.jpg</p>
+                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورتك<br/>profile-formal.png</p>
                     `;
                     parent.appendChild(placeholder);
                   }

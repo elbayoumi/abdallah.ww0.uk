@@ -16,7 +16,7 @@ export const translations = {
       description: "متخصص في الاقتصاد الزراعي والتعاوني، مع خبرة ميدانية في الإشراف والحصاد. أجمع بين المعرفة الأكاديمية والانضباط العملي لتحقيق أفضل النتائج في القطاع الزراعي.",
       cta: "تواصل معي",
       cv: "تحميل السيرة الذاتية (PDF)",
-      profileImg: "/profile-headshot.jpg",
+      profileImg: "/profile-formal.png",
       fieldImg: "/profile-casual.jpg",
     },
     about: {
@@ -109,7 +109,7 @@ export const translations = {
       description: "Specializing in Agricultural Economics and Cooperation, with field experience in supervision and harvesting. I combine academic knowledge with field discipline to achieve optimal results in the agricultural sector.",
       cta: "Contact Me",
       cv: "Download CV (PDF)",
-      profileImg: "/profile-headshot.jpg",
+      profileImg: "/profile-formal.png",
       fieldImg: "/profile-casual.jpg",
     },
     about: {
