@@ -50,33 +50,55 @@
 }
 
 @media print {
-  @page {
-    size: A4;
-    margin: 0;
+  /* Hide standard web UI */
+  nav, footer, .no-print, button, .lucide {
+    display: none !important;
   }
-  
-  body * {
-    visibility: hidden;
+
+  /* Reset body and html for print */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  
-  .print-area, .print-area * {
-    visibility: visible;
+
+  /* The actual print container needs to be at the root of the print engine */
+  #root > div:not(.print-container) {
+    display: none !important;
   }
-  
+
   .print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0;
-    padding: 0;
+    position: relative !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    border: none !important;
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  .no-print {
-    display: none !important;
+  /* Avoid any breaks inside the CV container */
+  .cv-content {
+    break-inside: avoid;
   }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+/* Scrollbar hiding for cleaner modal view */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
