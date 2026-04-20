@@ -315,8 +315,9 @@ const Navbar = ({ lang, setLang, t }: { lang: Lang, setLang: (l: Lang) => void, 
   );
 };
 
-const Hero = ({ t, onShowCV }: { t: any, onShowCV: () => void }) => {
+const Hero = ({ t, onShowCV, lang }: { t: any, onShowCV: () => void, lang: Lang }) => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const isRtl = lang === 'ar';
 
   const handleCVClick = () => {
     setIsGenerating(true);
@@ -327,37 +328,49 @@ const Hero = ({ t, onShowCV }: { t: any, onShowCV: () => void }) => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden blueprint-grid">
-      <FloatingLeaves />
-      <FieldGrid />
-      {/* Background Elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+    <section className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden">
+      {/* Dynamic Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-neutral-50/50" />
+        <div 
+          className="absolute inset-0 opacity-[0.03] grayscale pointer-events-none"
+          style={{ 
+            backgroundImage: `url('https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=2070&auto=format&fit=crop')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
+        <FloatingLeaves />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center relative z-10 w-full">
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: isRtl ? 50 : -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-start"
+          className="order-2 lg:order-1"
         >
-          <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-bold mb-6">
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-2xl text-xs font-black uppercase tracking-[0.2em] mb-8">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
             {t.hero.badge}
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-serif font-bold text-neutral-900 leading-tight mb-6">
+          <h1 className="text-5xl md:text-6xl lg:text-8xl font-serif font-black text-neutral-900 leading-[0.95] tracking-tight mb-8">
             {t.hero.firstName} <br />
-            <span className="text-primary">{t.hero.lastName}</span>
+            <span className="text-primary relative inline-block">
+              {t.hero.lastName}
+              <div className="absolute -bottom-2 left-0 w-full h-1.5 bg-primary/20 rounded-full" />
+            </span>
           </h1>
-          <p className="text-lg text-neutral-600 mb-10 max-w-xl leading-relaxed">
+          <p className="text-xl text-neutral-600 mb-12 max-w-xl leading-relaxed font-medium">
             {t.hero.description}
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-5">
             <a 
               href="#contact" 
-              className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-light transition-all shadow-xl shadow-primary/20 flex items-center gap-2"
+              className="px-10 py-5 bg-primary text-white rounded-2xl font-black hover:scale-[1.03] active:scale-95 transition-all shadow-2xl shadow-primary/30 flex items-center gap-3 text-sm tracking-wide"
             >
               {t.hero.cta}
               <Send size={18} className="rtl:rotate-180" />
@@ -365,17 +378,17 @@ const Hero = ({ t, onShowCV }: { t: any, onShowCV: () => void }) => {
             <button 
               onClick={handleCVClick}
               disabled={isGenerating}
-              className="bg-white text-neutral-900 border border-neutral-200 px-8 py-4 rounded-xl font-bold hover:bg-primary hover:text-white transition-all duration-300 flex items-center gap-2 shadow-xl shadow-neutral-200/50 group active:scale-95 disabled:opacity-50"
+              className="px-10 py-5 bg-white text-neutral-900 border-2 border-neutral-100 rounded-2xl font-black hover:border-primary/50 transition-all flex items-center gap-3 shadow-xl shadow-neutral-100 text-sm tracking-wide disabled:opacity-50"
             >
               {isGenerating ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  <span>Processing...</span>
+                  <span>PREPARING CV...</span>
                 </div>
               ) : (
                 <>
                   {t.hero.cv}
-                  <Download size={18} className="group-hover:animate-bounce" />
+                  <Download size={18} className="group-hover:translate-y-1 transition-transform" />
                 </>
               )}
             </button>
@@ -383,22 +396,51 @@ const Hero = ({ t, onShowCV }: { t: any, onShowCV: () => void }) => {
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.8, ease: "backOut" }}
           viewport={{ once: true }}
-          className="relative"
+          className="relative order-1 lg:order-2"
         >
-          <div className="aspect-square rounded-3xl overflow-hidden bg-neutral-100 relative z-10 border-8 border-white shadow-2xl">
-            <img 
-              src="https://picsum.photos/seed/agriculture/800/800" 
-              alt="Abdallah Ashraf - Agricultural Engineering" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              referrerPolicy="no-referrer"
-            />
+          <div className="relative group">
+            {/* Visual Frames - More subtle */}
+            <div className="absolute inset-0 bg-primary/20 rounded-[48px] rotate-3 scale-105 group-hover:rotate-0 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-white shadow-2xl rounded-[48px] -rotate-3 scale-105 group-hover:rotate-0 transition-transform duration-700 delay-75 border border-neutral-100" />
+            
+            <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden border-8 border-white z-10 shadow-lg bg-neutral-50 flex items-center justify-center">
+              <img 
+                src={t.hero.profileImg} 
+                alt={t.name} 
+                className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110"
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  const parent = (e.target as HTMLImageElement).parentElement;
+                  if (parent) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = "flex flex-col items-center justify-center p-8 text-center gap-4 text-neutral-300";
+                    placeholder.innerHTML = `
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورتك<br/>profile-headshot.jpg</p>
+                    `;
+                    parent.appendChild(placeholder);
+                  }
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-60 pointer-events-none" />
+            </div>
+
+            {/* Experience Floating Card */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1, duration: 0.5 }}
+              className="absolute -bottom-8 -left-8 lg:-left-12 bg-white px-8 py-6 rounded-3xl shadow-2xl border border-neutral-100 z-20 flex flex-col gap-1 items-center"
+            >
+              <span className="text-3xl font-black text-primary">2025</span>
+              <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">{t.about.yearLabel}</span>
+            </motion.div>
           </div>
-          <div className="absolute -top-6 -left-6 w-24 h-24 bg-accent/20 rounded-full blur-xl animate-pulse" />
-          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl" />
         </motion.div>
       </div>
     </section>
@@ -410,49 +452,77 @@ const About = ({ t }: { t: any }) => {
     <section id="about" className="section-padding bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative">
         <SectionHeader title={t.about.heading} t={t} />
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-start">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="space-y-10"
           >
-            <p className="text-lg md:text-xl text-neutral-700 leading-loose mb-8 text-justify">
+            <p className="text-xl text-neutral-700 leading-[1.8] text-justify font-medium">
               {t.about.description}
             </p>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-100">
-                <div className="text-primary font-bold text-2xl md:text-3xl mb-2">{t.about.country}</div>
-                <div className="text-neutral-500 text-sm">{t.about.countryLabel}</div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-2 p-8 bg-neutral-50 rounded-[32px] border border-neutral-100 hover:border-primary/20 transition-colors">
+                <span className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.3em]">{t.about.countryLabel}</span>
+                <span className="text-3xl font-black text-primary">{t.about.country}</span>
               </div>
-              <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-100">
-                <div className="text-primary font-bold text-2xl md:text-3xl mb-2">{t.about.year}</div>
-                <div className="text-neutral-500 text-sm">{t.about.yearLabel}</div>
+              <div className="relative overflow-hidden group p-8 bg-primary rounded-[32px] shadow-2xl">
+                <div 
+                  className="absolute inset-0 opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                  style={{ 
+                    backgroundImage: `url(${t.hero.fieldImg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                />
+                <div className="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-colors" />
+                <div className="relative z-10 flex flex-col gap-2">
+                  <span className="text-[10px] font-black text-white/70 uppercase tracking-[0.3em]">{t.about.yearLabel}</span>
+                  <span className="text-3xl font-black text-white">{t.about.year}</span>
+                </div>
               </div>
             </div>
           </motion.div>
           
           <div className="relative">
-            <div className="grid grid-cols-2 gap-4">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="aspect-[4/5] rounded-2xl overflow-hidden shadow-lg"
-              >
-                <img src="https://picsum.photos/seed/farm1/400/500" alt="Agricultural Practice" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="aspect-[4/5] rounded-2xl overflow-hidden shadow-lg translate-y-8"
-              >
-                <img src="https://picsum.photos/seed/farm2/400/500" alt="Field Work" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </motion.div>
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="relative aspect-[3/4] rounded-[48px] overflow-hidden border-8 border-white shadow-[0_40px_80px_rgba(0,0,0,0.1)] group bg-neutral-50 flex items-center justify-center font-sans uppercase tracking-[0.2em]"
+            >
+              <img 
+                src={t.hero.fieldImg} 
+                alt="Agricultural Context" 
+                className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" 
+                referrerPolicy="no-referrer" 
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  const parent = (e.target as HTMLImageElement).parentElement;
+                  if (parent) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = "flex flex-col items-center justify-center p-8 text-center gap-4 text-neutral-300";
+                    placeholder.innerHTML = `
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورة العمل<br/>profile-casual.jpg</p>
+                    `;
+                    parent.appendChild(placeholder);
+                  }
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              <div className="absolute bottom-8 left-8 right-8 text-white pointer-events-none">
+                <h4 className="text-lg font-black uppercase tracking-widest mb-1">{t.about.portraitTitle}</h4>
+                <p className="text-xs font-bold text-white/70">{t.about.portraitSubtitle}</p>
+              </div>
+            </motion.div>
+            {/* Design Accents */}
+            <div className="absolute -z-10 -top-12 -right-12 w-64 h-64 bg-primary/5 rounded-[64px] rotate-12" />
+            <div className="absolute -z-10 -bottom-12 -left-12 w-48 h-48 bg-accent/5 rounded-[64px] -rotate-6" />
           </div>
         </div>
       </div>
@@ -751,8 +821,21 @@ const Contact = ({ t }: { t: any }) => {
             className="bg-white rounded-3xl p-8 text-neutral-900 shadow-2xl"
           >
             <div className="mb-8 text-center">
-              <div className="w-20 h-20 bg-primary/10 rounded-full mx-auto flex items-center justify-center mb-4">
-                <div className="w-12 h-12 bg-primary rounded-full shadow-lg" />
+              <div className="w-20 h-20 rounded-full mx-auto overflow-hidden border-4 border-primary/10 shadow-lg mb-4 bg-primary/5">
+                <img
+                  src={t.hero.profileImg}
+                  alt={t.name}
+                  className="w-full h-full object-cover object-top"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    const parent = (e.target as HTMLImageElement).parentElement;
+                    if (parent) {
+                      parent.classList.add('flex', 'items-center', 'justify-center');
+                      parent.innerHTML = '<div class="w-12 h-12 bg-primary rounded-full shadow-lg"></div>';
+                    }
+                  }}
+                />
               </div>
               <h3 className="text-2xl font-serif font-bold">{t.name}</h3>
               <p className="text-primary font-bold">{t.title}</p>
@@ -785,123 +868,164 @@ const Contact = ({ t }: { t: any }) => {
   );
 };
 
-const CVPage = ({ t, onClose, lang }: { t: any, onClose: () => void, lang: Lang }) => {
+const CVPage = ({ t: initialT, onClose, lang: initialLang }: { t: any, onClose: () => void, lang: Lang }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [currentLang, setCurrentLang] = useState<Lang>(initialLang);
+  const t = translations[currentLang];
 
   const handleDownload = () => {
     setIsProcessing(true);
-    // Give UI time to update
     setTimeout(() => {
       window.print();
       setIsProcessing(false);
     }, 500);
   };
 
+  const isRtl = currentLang === 'ar';
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="print-container fixed inset-0 z-[100] bg-neutral-900/95 backdrop-blur-xl overflow-y-auto px-4 py-8 lg:p-12 no-scrollbar print:p-0 print:bg-white print:static print:overflow-visible print:block print:z-auto"
+      className="print-container fixed inset-0 z-[100] bg-neutral-950 overflow-y-auto no-scrollbar print:p-0 print:bg-white print:static print:overflow-visible print:block print:z-auto"
+      dir={isRtl ? 'rtl' : 'ltr'}
     >
-      <div className="max-w-4xl mx-auto relative print:max-w-none print:m-0">
-        {/* CV Toolbar */}
-        <div className="flex justify-between items-center mb-8 no-print sticky top-0 z-[110] bg-neutral-900/50 backdrop-blur-lg p-4 rounded-2xl border border-white/10">
-          <button 
-            onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-lg border border-white/10 hover:bg-white/20 transition-all text-xs font-bold"
-          >
-            <X size={16} />
-            {t.cvPage.close}
-          </button>
+      <div className="max-w-5xl mx-auto relative print:max-w-none print:m-0 min-h-screen flex flex-col items-center py-10 print:py-0">
+        
+        {/* CV Toolbar - Hidden on Print */}
+        <div className="w-full max-w-[210mm] flex flex-col sm:flex-row justify-between items-center gap-4 mb-10 no-print bg-neutral-900/80 backdrop-blur-xl p-5 rounded-3xl border border-white/5 sticky top-5 z-[110] shadow-2xl">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={onClose}
+              className="p-3 bg-white/5 text-white rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+              title={t.cvPage.close}
+            >
+              <X size={20} />
+            </button>
+            <div className="h-8 w-[1px] bg-white/10 mx-2" />
+            <div className="flex bg-black/40 p-1 rounded-xl border border-white/5">
+              <button 
+                onClick={() => setCurrentLang('ar')}
+                className={cn(
+                  "px-4 py-1.5 rounded-lg text-xs font-bold transition-all",
+                  currentLang === 'ar' ? "bg-primary text-white shadow-lg" : "text-neutral-500 hover:text-white"
+                )}
+              >
+                عربي
+              </button>
+              <button 
+                onClick={() => setCurrentLang('en')}
+                className={cn(
+                  "px-4 py-1.5 rounded-lg text-xs font-bold transition-all",
+                  currentLang === 'en' ? "bg-primary text-white shadow-lg" : "text-neutral-500 hover:text-white"
+                )}
+              >
+                EN
+              </button>
+            </div>
+          </div>
           
           <button 
             onClick={handleDownload}
             disabled={isProcessing}
-            className="group flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-primary/40 text-sm font-black disabled:opacity-50"
+            className="w-full sm:w-auto group flex items-center justify-center gap-3 px-10 py-4 bg-primary text-white rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_50px_rgba(34,197,94,0.3)] text-sm font-black disabled:opacity-50"
           >
             {isProcessing ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Generating high-quality PDF...</span>
+                <span>PDF generation engine active...</span>
               </div>
             ) : (
               <>
-                <Download size={18} className="group-hover:-translate-y-1 transition-transform" />
+                <Download size={18} className="group-hover:translate-y-1 transition-transform" />
                 {t.cvPage.print}
               </>
             )}
           </button>
         </div>
 
-        {/* CV Content - Professional A4 Container */}
-        <div className="print-area bg-white rounded-sm relative overflow-hidden mx-auto shadow-[0_0_100px_rgba(0,0,0,0.5)] print:shadow-none print:m-0 print:rounded-none cv-content">
-          {/* Design Accents - Minimal & Professional */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 no-print" />
-          <div className="absolute top-0 left-0 w-2 h-full bg-primary/10" />
+        {/* ATS-FRIENDLY CV CONTENT */}
+        <div className={cn(
+          "print-area bg-white relative overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.4)] print:shadow-none print:m-0 print:rounded-none cv-content",
+          "w-full max-w-[210mm] min-h-[297mm] flex flex-col font-sans text-neutral-900 border border-neutral-100 print:border-none"
+        )}>
+          {/* Subtle Grid Pattern for Web view, hidden for print */}
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 no-print" />
           
-          <div className="p-12 md:p-16 lg:p-20 relative z-10 h-full flex flex-col">
-            {/* Header Section */}
-            <header className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end mb-16 relative">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 text-primary font-bold tracking-[0.2em] text-[9px] uppercase bg-primary/5 px-3 py-1 rounded">
-                  <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                  Engineering Portfolio
-                </div>
-                <h1 className="text-5xl md:text-6xl font-serif font-black text-neutral-900 leading-[0.9] tracking-tighter">
-                  {t.hero.firstName} <br />
-                  <span className="text-primary">{t.hero.lastName}</span>
-                </h1>
-                <div className="flex items-center gap-2">
-                  <div className="h-[2px] w-8 bg-accent" />
-                  <h2 className="text-sm text-neutral-400 font-bold tracking-[0.3em] uppercase">
-                    {t.title}
-                  </h2>
-                </div>
+          {/* Visual Header Accent */}
+          <div className="h-3 w-full bg-primary no-print" />
+
+          <div className="p-10 md:p-14 lg:p-16 relative z-10 flex-1 flex flex-col">
+            {/* Header: Name & Contact - High ATS Priority */}
+            <header className="mb-14 border-b-2 border-neutral-900 pb-10 flex flex-col md:flex-row gap-10">
+              <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-xl border-4 border-neutral-50 mb-4 md:mb-0">
+                <img 
+                  src={t.hero.profileImg} 
+                  alt={t.name}
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/man/300/300';
+                  }}
+                />
               </div>
-              
-              <div className="grid grid-cols-1 gap-2 text-[11px] text-neutral-500 font-medium ltr:text-right rtl:text-left">
-                <a href={`mailto:abdallahashrf618@gmail.com`} className="hover:text-primary transition-colors flex items-center gap-2 justify-end">
-                  abdallahashrf618@gmail.com
-                  <Mail size={12} className="text-primary" />
-                </a>
-                <a href={`tel:+201000213215`} className="hover:text-primary transition-colors flex items-center gap-2 justify-end" dir="ltr">
-                  +20 100 021 3215
-                  <Phone size={12} className="text-primary" />
-                </a>
-                <p className="flex items-center gap-2 justify-end">
-                  {t.contact.egypt}
-                  <MapPin size={12} className="text-primary" />
-                </p>
+              <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div className="space-y-2">
+                  <h1 className="text-4xl md:text-5xl font-black text-neutral-900 tracking-tight leading-none">
+                    {t.name}
+                  </h1>
+                  <p className="text-xl font-bold text-primary tracking-wide uppercase">
+                    {t.title}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-2 text-[12px] font-bold text-neutral-600">
+                  <div className="flex items-center gap-3 md:justify-end">
+                    <span className="order-2 md:order-1">abdallahashrf618@gmail.com</span>
+                    <Mail size={14} className="text-neutral-400 order-1 md:order-2" />
+                  </div>
+                  <div className="flex items-center gap-3 md:justify-end" dir="ltr">
+                    <span className="order-2 md:order-1">+20 100 021 3215</span>
+                    <Phone size={14} className="text-neutral-400 order-1 md:order-2" />
+                  </div>
+                  <div className="flex items-center gap-3 md:justify-end">
+                    <span className="order-2 md:order-1">{t.contact.egypt}</span>
+                    <MapPin size={14} className="text-neutral-400 order-1 md:order-2" />
+                  </div>
+                </div>
               </div>
             </header>
 
-            <div className="grid md:grid-cols-12 gap-16 flex-1">
-              {/* Left Column (Primary Content) */}
-              <div className="md:col-span-8 space-y-16">
-                {/* Summary */}
-                <section className="relative">
-                  <div className="absolute -left-6 top-1 w-1 h-4 bg-accent/30 rounded-full" />
-                  <h3 className="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6">{t.cvPage.summary}</h3>
-                  <p className="text-[13px] text-neutral-600 leading-[1.7] text-justify font-medium opacity-90">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 flex-1">
+              {/* Main Content Area */}
+              <div className="lg:col-span-8 space-y-12">
+                {/* Professional Summary */}
+                <section>
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-4 flex items-center gap-3 border-l-4 border-primary pl-4 rtl:border-l-0 rtl:border-r-4 rtl:pr-4">
+                    {t.cvPage.summary}
+                  </h2>
+                  <p className="text-[14px] text-neutral-600 leading-relaxed font-medium">
                     {t.about.description}
                   </p>
                 </section>
 
-                {/* Experience */}
+                {/* Professional Experience */}
                 <section>
-                  <h3 className="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8">{t.experience.heading}</h3>
-                  <div className="space-y-12">
-                    <div className="group relative">
-                      <div className="flex flex-col sm:flex-row justify-between sm:items-baseline mb-4">
-                        <h4 className="font-bold text-neutral-900 text-lg leading-tight group-hover:text-primary transition-colors">{t.experience.role}</h4>
-                        <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest bg-neutral-50 px-2 py-1 rounded" dir="ltr">{t.experience.period}</span>
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-3 border-l-4 border-primary pl-4 rtl:border-l-0 rtl:border-r-4 rtl:pr-4">
+                    {t.experience.heading}
+                  </h2>
+                  <div className="space-y-10">
+                    <div>
+                      <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                        <h3 className="font-bold text-neutral-900 text-lg">{t.experience.role}</h3>
+                        <span className="text-[11px] font-black text-neutral-500 uppercase tracking-widest bg-neutral-100 px-3 py-1 rounded-full" dir="ltr">{t.experience.period}</span>
                       </div>
-                      <p className="text-accent text-[11px] font-black mb-6 tracking-[0.1em] uppercase">{t.experience.org}</p>
-                      <ul className="space-y-4">
+                      <p className="text-neutral-500 text-sm font-bold mb-4">{t.experience.org}</p>
+                      <ul className="space-y-3">
                         {t.experience.tasks.map((task: string, i: number) => (
-                          <li key={i} className="flex gap-4 text-[12px] text-neutral-600 leading-relaxed font-medium">
-                            <span className="text-primary font-black mt-1.5">•</span>
+                          <li key={i} className="flex gap-4 text-[13px] text-neutral-600 leading-relaxed font-medium">
+                            <span className="text-primary font-black mt-1">•</span>
                             <span>{task}</span>
                           </li>
                         ))}
@@ -910,92 +1034,109 @@ const CVPage = ({ t, onClose, lang }: { t: any, onClose: () => void, lang: Lang 
                   </div>
                 </section>
 
-                {/* Education */}
+                {/* Educational Qualifications */}
                 <section>
-                  <h3 className="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6">{t.education.heading}</h3>
-                  <div className="p-6 bg-neutral-50/50 rounded-2xl border border-neutral-100 group hover:border-primary/20 transition-all">
-                    <h4 className="font-bold text-neutral-900 text-sm mb-2">{t.education.degree}</h4>
-                    <p className="text-neutral-500 text-xs italic mb-4">{t.education.department}</p>
-                    <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest">
-                      <div className="w-1.5 h-1.5 bg-accent rounded-full" />
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-3 border-l-4 border-primary pl-4 rtl:border-l-0 rtl:border-r-4 rtl:pr-4">
+                    {t.education.heading}
+                  </h2>
+                  <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-200">
+                    <h3 className="font-bold text-neutral-900 text-base mb-1">{t.education.degree}</h3>
+                    <p className="text-neutral-500 text-xs font-bold mb-3 italic">{t.education.department}</p>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-neutral-200 rounded-lg text-primary font-bold text-xs">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                       {t.education.grade}
                     </div>
                   </div>
                 </section>
               </div>
 
-              {/* Right Column (Sidebars) */}
-              <div className="md:col-span-4 space-y-16">
+              {/* Sidebar Area */}
+              <div className="lg:col-span-4 space-y-12">
+                {/* Personal Information */}
                 <section>
-                  <h3 className="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8">{t.cvPage.personalInfo}</h3>
-                  <div className="space-y-8">
-                    <div className="space-y-1">
-                      <p className="text-[10px] text-neutral-400 uppercase font-black tracking-widest">{t.about.countryLabel}</p>
-                      <p className="text-sm font-bold text-neutral-800">{t.about.country}</p>
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-6 border-b-2 border-neutral-100 pb-2">
+                    {t.cvPage.personalInfo}
+                  </h2>
+                  <div className="space-y-6">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] text-neutral-400 font-black uppercase tracking-widest">{t.about.countryLabel}</span>
+                      <span className="text-sm font-bold text-neutral-700">{t.about.country}</span>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] text-neutral-400 uppercase font-black tracking-widest">{t.skills.military}</p>
-                      <p className="text-sm font-bold text-neutral-800">{t.skills.militaryStatus}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] text-neutral-400 uppercase font-black tracking-widest">Language Proficiency</p>
-                      <div className="space-y-3 mt-4">
-                        <div className="flex flex-col gap-1.5">
-                          <div className="flex justify-between text-[11px] font-bold">
-                            <span className="text-neutral-700">{t.skills.ar}</span>
-                            <span className="text-primary">Native</span>
-                          </div>
-                          <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-primary w-full" />
-                          </div>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <div className="flex justify-between text-[11px] font-bold">
-                            <span className="text-neutral-700">{t.skills.en}</span>
-                            <span className="text-neutral-400">Fair</span>
-                          </div>
-                          <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-accent w-[60%]" />
-                          </div>
-                        </div>
-                      </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] text-neutral-400 font-black uppercase tracking-widest">{t.skills.military}</span>
+                      <span className="text-sm font-bold text-neutral-700">{t.skills.militaryStatus}</span>
                     </div>
                   </div>
                 </section>
 
+                {/* Core Skills - Optimized for ATS searching */}
                 <section>
-                  <h3 className="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8">{t.skills.heading}</h3>
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-6 border-b-2 border-neutral-100 pb-2">
+                    {t.skills.heading}
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {t.skills.items.map((skill: string) => (
-                      <span key={skill} className="px-3 py-1.5 bg-white text-neutral-700 rounded-lg border border-neutral-100 text-[10px] font-bold shadow-sm hover:border-primary/30 transition-all uppercase">
+                      <span key={skill} className="px-3 py-1.5 bg-neutral-900 text-white rounded-lg text-[10px] font-black uppercase tracking-wider">
                         {skill}
                       </span>
                     ))}
                   </div>
                 </section>
 
-                {/* Badge / Quality Seal */}
-                <div className="pt-12 text-center">
-                  <div className="w-24 h-24 border-2 border-neutral-100 rounded-full mx-auto flex flex-col items-center justify-center p-4 rotate-12 opacity-30 grayscale print:opacity-10">
-                    <Leaf size={24} className="text-primary mb-1" />
-                    <p className="text-[7px] font-black text-neutral-900 uppercase tracking-widest leading-tight">Agri-Eng Verified</p>
+                {/* Technical / Language */}
+                <section>
+                  <h2 className="text-sm font-black text-neutral-900 uppercase tracking-[0.2em] mb-6 border-b-2 border-neutral-100 pb-2">
+                    {t.nav.skills}
+                  </h2>
+                  <div className="space-y-5">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[11px] font-black uppercase">
+                        <span className="text-neutral-500">{t.skills.ar}</span>
+                        <span className="text-primary">{t.skills.arLevel}</span>
+                      </div>
+                      <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary w-full" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[11px] font-black uppercase">
+                        <span className="text-neutral-500">{t.skills.en}</span>
+                        <span className="text-neutral-400">{t.skills.enLevel}</span>
+                      </div>
+                      <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-neutral-300 w-1/2" />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Professional Stamp / Icon */}
+                <div className="pt-10 flex justify-center">
+                  <div className="w-24 h-24 border-4 border-neutral-50 rounded-full flex flex-col items-center justify-center p-4 opacity-20 grayscale hover:opacity-100 transition-opacity">
+                    <Leaf size={32} className="text-primary mb-1" />
+                    <p className="text-[6px] font-black text-neutral-900 uppercase tracking-[0.3em] text-center">Agricultural Engineering Division</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Footer of CV */}
-            <footer className="mt-auto pt-16 border-t border-neutral-100 flex justify-between items-center opacity-40">
-              <div className="flex items-center gap-2">
-                <div className="w-1 h-1 bg-primary rounded-full" />
-                <p className="text-[8px] text-neutral-400 font-black tracking-[0.3em] uppercase">Digitally Generated Portfolio CV</p>
-              </div>
-              <p className="text-[8px] text-neutral-400 uppercase font-black tracking-widest">
-                Ref: {new Date().getFullYear()}-{lang.toUpperCase()}-E
+            {/* Resume Footer */}
+            <footer className="mt-auto pt-10 border-t border-neutral-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-neutral-400">
+              <p className="text-[9px] font-black uppercase tracking-[0.3em]">
+                {currentLang === 'ar' ? 'نموذج سيرة ذاتية معتمد' : 'Authorized Resume Portfolio'}
               </p>
+              <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.1em]">
+                <span>{new Date().getFullYear()}</span>
+                <span className="w-1 h-1 bg-neutral-300 rounded-full" />
+                <span>Reference: AE-{currentLang.toUpperCase()}</span>
+              </div>
             </footer>
           </div>
         </div>
+        
+        <p className="mt-10 mb-20 text-neutral-500 text-xs font-bold no-print tracking-widest uppercase">
+          {currentLang === 'ar' ? 'تم التصميم والبرمجة بواسطة مهندس زراعي' : 'Engineered for Performance'}
+        </p>
       </div>
     </motion.div>
   );
@@ -1099,7 +1240,7 @@ export default function App() {
         >
           <Navbar lang={lang} setLang={setLang} t={t} />
           <main>
-            <Hero t={t} onShowCV={() => setShowCV(true)} />
+            <Hero t={t} onShowCV={() => setShowCV(true)} lang={lang} />
             <About t={t} />
             <Education t={t} />
             <Experience t={t} />
