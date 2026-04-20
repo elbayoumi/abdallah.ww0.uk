@@ -18,7 +18,6 @@
   
   body {
     @apply bg-bg text-neutral-900 font-sans;
-    direction: rtl;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -260,8 +260,8 @@ const Navbar = ({ lang, setLang, t }: { lang: Lang, setLang: (l: Lang) => void, 
             className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg border border-neutral-200 hover:bg-neutral-100 transition-all text-[10px] sm:text-xs font-bold whitespace-nowrap"
           >
             <Globe size={14} />
-            <span className="hidden xs:inline">{lang === 'ar' ? 'English' : 'العربية'}</span>
-            <span className="xs:hidden">{lang === 'ar' ? 'EN' : 'AR'}</span>
+            <span className="hidden sm:inline">{lang === 'ar' ? 'English' : 'العربية'}</span>
+            <span className="sm:hidden">{lang === 'ar' ? 'EN' : 'AR'}</span>
           </button>
           
           <a 
@@ -421,7 +421,7 @@ const Hero = ({ t, onShowCV, lang }: { t: any, onShowCV: () => void, lang: Lang 
                     placeholder.className = "flex flex-col items-center justify-center p-8 text-center gap-4 text-neutral-300";
                     placeholder.innerHTML = `
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورتك<br/>profile-suit.jpg</p>
+                      <p class="text-[10px] font-black uppercase tracking-widest leading-tight">يرجى رفع صورتك<br/>profile-headshot.jpg</p>
                     `;
                     parent.appendChild(placeholder);
                   }
@@ -1214,9 +1214,6 @@ export default function App() {
   const t = translations[lang];
 
   useEffect(() => {
-    document.documentElement.dir = (lang === 'ar' && !showCV) || (lang === 'ar' && showCV) ? 'rtl' : 'ltr';
-    // However, when showing CV, maybe we want to force specific layout if user prefers.
-    // Let's stick to the selected lang.
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     
